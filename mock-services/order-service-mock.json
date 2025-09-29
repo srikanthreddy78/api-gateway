@@ -10,63 +10,9 @@
         "Content-Type": ["application/json"]
       },
       "body": {
-        "id": "${json-unit.any-string}",
-        "userId": "user-123",
-        "items": [
-          {
-            "productId": "prod-1",
-            "quantity": 2,
-            "price": 49.99
-          }
-        ],
-        "total": 99.98,
-        "status": "PENDING",
-        "createdAt": "2025-09-29T10:30:00Z"
-      }
-    }
-  },
-  {
-    "httpRequest": {
-      "method": "GET",
-      "path": "/orders"
-    },
-    "httpResponse": {
-      "statusCode": 200,
-      "headers": {
-        "Content-Type": ["application/json"]
-      },
-      "body": [
-        {
-          "id": "order-1",
-          "total": 99.98,
-          "status": "DELIVERED"
-        },
-        {
-          "id": "order-2",
-          "total": 149.99,
-          "status": "PENDING"
-        }
-      ]
-    }
-  },
-  {
-    "httpRequest": {
-      "method": "POST",
-      "path": "/orders"
-    },
-    "httpResponse": {
-      "statusCode": 201,
-      "headers": {
-        "Content-Type": ["application/json"]
-      },
-      "body": {
-        "id": "order-${json-unit.any-number}",
-        "status": "CREATED",
-        "message": "Order created successfully"
-      },
-      "delay": {
-        "timeUnit": "MILLISECONDS",
-        "value": 100
+        "id": "123",
+        "total": 99.99,
+        "status": "PENDING"
       }
     }
   }
