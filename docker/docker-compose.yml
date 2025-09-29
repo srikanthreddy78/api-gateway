@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # Redis for rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: gateway-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gateway-network
+
+  # Mock User Service
+  user-service:
+    image: mockserver/mockserver:latest
+    container_name: user-service
+    ports:
+      - "8081:1080"
+    environment:
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/user-service-mock.json
+      MOCKSERVER_LOG_LEVEL: INFO
+    volumes:
+      - ./mock-services/user-service-mock.json:/config/user-service-mock.json
+    networks:
+      - gateway-network
+
+  # Mock Order Service
+  order-service:
+    image: mockserver/mockserver:latest
+    container_name: order-service
+    ports:
+      - "8082:1080"
+    environment:
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/order-service-mock.json
+      MOCKSERVER_LOG_LEVEL: INFO
+    volumes:
+      - ./mock-services/order-service-mock.json:/config/order-service-mock.json
+    networks:
+      - gateway-network
+
+  # Mock Product Service
+  product-service:
+    image: mockserver/mockserver:latest
+    container_name: product-service
+    ports:
+      - "8083:1080"
+    environment:
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/product-service-mock.json
+      MOCKSERVER_LOG_LEVEL: INFO
+    volumes:
+      - ./mock-services/product-service-mock.json:/config/product-service-mock.json
+    networks:
+      - gateway-network
+
+  # Redis Commander (Optional - GUI for Redis)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - "8084:8081"
+    depends_on:
+      - redis
+    networks:
+      - gateway-network
+
+networks:
+  gateway-network:
+    driver: bridge
+
+volumes:
+  redis-data:

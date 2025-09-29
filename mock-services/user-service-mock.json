@@ -1,0 +1,61 @@
+[
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/users/.*"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "id": "${json-unit.any-string}",
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "role": "USER",
+        "createdAt": "2025-09-29T10:30:00Z"
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/users"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": [
+        {
+          "id": "user-1",
+          "name": "John Doe",
+          "email": "john@example.com"
+        },
+        {
+          "id": "user-2",
+          "name": "Jane Smith",
+          "email": "jane@example.com"
+        }
+      ]
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/users"
+    },
+    "httpResponse": {
+      "statusCode": 201,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "id": "user-${json-unit.any-number}",
+        "message": "User created successfully"
+      }
+    }
+  }
+]

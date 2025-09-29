@@ -1,0 +1,70 @@
+[
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/products/.*"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "id": "${json-unit.any-string}",
+        "name": "Laptop Pro",
+        "description": "High-performance laptop",
+        "price": 999.99,
+        "stock": 50,
+        "category": "Electronics"
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/products"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": [
+        {
+          "id": "prod-1",
+          "name": "Laptop Pro",
+          "price": 999.99,
+          "stock": 50
+        },
+        {
+          "id": "prod-2",
+          "name": "Wireless Mouse",
+          "price": 29.99,
+          "stock": 200
+        },
+        {
+          "id": "prod-3",
+          "name": "Mechanical Keyboard",
+          "price": 149.99,
+          "stock": 75
+        }
+      ]
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/products"
+    },
+    "httpResponse": {
+      "statusCode": 201,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "id": "prod-${json-unit.any-number}",
+        "message": "Product created successfully"
+      }
+    }
+  }
+]

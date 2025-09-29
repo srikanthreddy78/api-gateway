@@ -1,0 +1,64 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
+
+# Gateway Configuration
+gateway:
+  routes:
+    - id: user-service
+      path: /api/users/**
+      uri: ${USER_SERVICE_URL:http://localhost:8081}
+      strip-prefix: 1
+
+    - id: order-service
+      path: /api/orders/**
+      uri: ${ORDER_SERVICE_URL:http://localhost:8082}
+      strip-prefix: 1
+
+    - id: product-service
+      path: /api/products/**
+      uri: ${PRODUCT_SERVICE_URL:http://localhost:8083}
+      strip-prefix: 1
+
+  # Rate Limiting Configuration
+  rate-limit:
+    enabled: true
+    default-limit: 100  # requests per minute
+    redis-key-prefix: "gateway:ratelimit:"
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# Logging Configuration
+logging:
+  level:
+    com.gateway: DEBUG
+    org.springframework.web: INFO
+    org.springframework.data.redis: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
